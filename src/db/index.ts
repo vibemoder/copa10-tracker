@@ -2,7 +2,11 @@ import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
 import * as schema from './schema';
 
-const connectionString = import.meta.env?.POSTGRES_URL || process.env?.POSTGRES_URL;
+const connectionString = 
+  import.meta.env?.POSTGRES_URL || 
+  process.env?.POSTGRES_URL || 
+  import.meta.env?.copa10_POSTGRES_URL || 
+  process.env?.copa10_POSTGRES_URL;
 const isValid = connectionString && !connectionString.includes('...') && connectionString.startsWith('postgres');
 
 if (!isValid) {
