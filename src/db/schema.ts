@@ -10,12 +10,23 @@ export const stickers = pgTable('stickers', {
   group: varchar('group', { length: 10 }), // Group (A, B, C...)
   teamOrder: integer('team_order'), // Order within the team section
   isSpecial: boolean('is_special').default(false),
+  
+  // New Player Stats Fields
+  height: varchar('height', { length: 20 }), // e.g., "1.85m"
+  club: varchar('club', { length: 255 }), // e.g., "Inter Miami"
+  socialInstagram: text('social_instagram'), // Link or handle
+  socialTwitter: text('social_twitter'),
+  marketValue: varchar('market_value', { length: 100 }), // Optional: "€100M"
 });
 
 export const profiles = pgTable('profiles', {
   id: text('id').primaryKey(), // Clerk ID
   email: text('email').notNull(),
+  lat: text('lat'), // Approximate latitude (string to avoid precision issues if needed, or just rounded)
+  lng: text('lng'), // Approximate longitude
+  city: varchar('city', { length: 255 }),
   createdAt: timestamp('created_at').defaultNow(),
+  lastActive: timestamp('last_active').defaultNow(),
 });
 
 export const collection = pgTable('collection', {

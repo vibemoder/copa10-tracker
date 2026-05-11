@@ -1,12 +1,14 @@
 ---
 import '../styles/global.css'
-import { SignedIn, SignedOut, UserButton, SignInButton } from '@clerk/astro/components';
+import { UserButton, SignInButton } from '@clerk/astro/components';
+import LocationSync from '../components/LocationSync';
 
 interface Props {
 	title: string;
 }
 
 const { title } = Astro.props;
+const { userId } = Astro.locals.auth();
 ---
 
 <!doctype html>
@@ -19,15 +21,15 @@ const { title } = Astro.props;
 		<title>{title}</title>
 	</head>
 	<body class="bg-zinc-950 text-zinc-100 min-h-screen">
+        <LocationSync client:load isLoggedIn={!!userId} />
 		<header class="border-b border-zinc-800 p-4 flex justify-between items-center max-w-7xl mx-auto w-full">
 			<h1 class="text-xl font-bold text-[#e3b341]">Copa10 Sticker Tracker</h1>
 			<nav>
-				<SignedIn>
+				{userId ? (
 					<UserButton />
-				</SignedIn>
-				<SignedOut>
+				) : (
 					<SignInButton mode="modal" class="bg-[#e3b341] text-zinc-950 px-4 py-2 rounded font-bold hover:bg-[#d4a230] transition-colors" />
-				</SignedOut>
+				)}
 			</nav>
 		</header>
 		<main class="max-w-7xl mx-auto p-4">

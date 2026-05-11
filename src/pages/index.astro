@@ -1,6 +1,47 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import stickerData from '../scripts/stickers_seed.json';
+import { db } from '../db';
+import { stickers, collection } from '../db/schema';
+import { asc, eq, and } from 'drizzle-orm';
+import { syncUser } from '../db/utils';
+import StickerCard from '../components/StickerCard';
+import fallbackStickers from '../scripts/stickers_seed.json';
+
+const { userId } = Astro.locals.auth();
+let userEmail = '';
+
+if (userId) {
+    try {
+        const user = await Astro.locals.currentUser();
+        userEmail = user?.emailAddresses[0]?.emailAddress || '';
+        if (userEmail) {
+            await syncUser(userId, userEmail);
+        }
+    } catch (e) {
+        console.warn('User sync failed, probably no DB');
+    }
+}
+
+// Fetch stickers from the database
+let stickerData = [];
+let userCollection: Record<number, number> = {};
+let dbError = false;
+
+try {
+    stickerData = await db.select().from(stickers).orderBy(asc(stickers.id));
+    
+    if (userId) {
+        const userStickers = await db.select().from(collection).where(eq(collection.userId, userId));
+        userCollection = userStickers.reduce((acc, row) => {
+            acc[row.stickerId] = row.qty;
+            return acc;
+        }, {} as Record<number, number>);
+    }
+} catch (error) {
+    console.warn('DB connection failed, using fallback JSON data.');
+    stickerData = fallbackStickers;
+    dbError = true;
+}
 
 // Group stickers by nation for the "Combined View"
 const groups = stickerData.reduce((acc: any, sticker) => {
@@ -15,10 +56,96 @@ const nations = Object.keys(groups).sort((a, b) => {
     if (b === 'Special') return 1;
     return a.localeCompare(b);
 });
+
+// Progress Stats
+const totalStickers = stickerData.length;
+const ownedCount = Object.values(userCollection).filter(qty => qty > 0).length;
+const missingCount = totalStickers - ownedCount;
+const percentOwned = totalStickers > 0 ? Math.round((ownedCount / totalStickers) * 100) : 0;
+const totalDuplicates = Object.values(userCollection).reduce((acc, qty) => acc + Math.max(0, qty - 1), 0);
+
+// Fetch Nearby Collectors (Anonymous)
+let nearbyCollectors: any[] = [];
+if (userId) {
+    const userProfile = await db.query.profiles.findFirst({
+        where: eq(profiles.id, userId)
+    });
+    
+    if (userProfile?.lat && userProfile?.lng) {
+        nearbyCollectors = await db.select({
+            id: profiles.id,
+            city: profiles.city,
+        })
+        .from(profiles)
+        .where(
+            and(
+                eq(profiles.lat, userProfile.lat),
+                eq(profiles.lng, userProfile.lng),
+                // not(eq(profiles.id, userId)) // Optional: exclude self
+            )
+        )
+        .limit(10);
+    }
+}
 ---
 
 <Layout title="Copa10 - Sticker Tracker">
 	<section class="py-8">
+        {dbError && (
+            <div class="bg-red-900/20 border border-red-900/50 p-6 rounded-xl mb-8 text-center">
+                <h3 class="text-xl font-bold text-red-500 mb-2">Database Connection Error</h3>
+                <p class="text-zinc-400">We couldn't connect to the database. Please ensure your <code>POSTGRES_URL</code> is correctly configured in <code>.env.local</code>.</p>
+            </div>
+        )}
+
+        {userId && !dbError && (
+            <>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div class="bg-zinc-900 border border-zinc-800 p-4 rounded-xl shadow-lg">
+                    <span class="text-xs text-zinc-500 uppercase tracking-widest font-bold">Completion</span>
+                    <div class="flex items-end gap-2 mt-1">
+                        <span class="text-3xl font-bold text-[#e3b341]">{percentOwned}%</span>
+                        <span class="text-sm text-zinc-400 mb-1">{ownedCount}/{totalStickers}</span>
+                    </div>
+                    <div class="w-full bg-zinc-800 h-1.5 rounded-full mt-3 overflow-hidden">
+                        <div class="bg-[#e3b341] h-full transition-all duration-500" style={`width: ${percentOwned}%`} />
+                    </div>
+                </div>
+                <div class="bg-zinc-900 border border-zinc-800 p-4 rounded-xl shadow-lg">
+                    <span class="text-xs text-zinc-500 uppercase tracking-widest font-bold">Missing</span>
+                    <div class="flex items-end gap-2 mt-1">
+                        <span class="text-3xl font-bold text-white">{missingCount}</span>
+                    </div>
+                </div>
+                <div class="bg-zinc-900 border border-zinc-800 p-4 rounded-xl shadow-lg">
+                    <span class="text-xs text-zinc-500 uppercase tracking-widest font-bold">Duplicates</span>
+                    <div class="flex items-end gap-2 mt-1">
+                        <span class="text-3xl font-bold text-blue-500">{totalDuplicates}</span>
+                    </div>
+                </div>
+                <div class="bg-zinc-900 border border-zinc-800 p-4 rounded-xl shadow-lg">
+                    <span class="text-xs text-zinc-500 uppercase tracking-widest font-bold">Nearby</span>
+                    <div class="flex items-end gap-2 mt-1">
+                        <span class="text-3xl font-bold text-green-500">{nearbyCollectors.length}</span>
+                        <span class="text-xs text-zinc-500 mb-1">collectors</span>
+                    </div>
+                </div>
+            </div>
+
+            {nearbyCollectors.length > 0 && (
+                <div class="bg-zinc-900/50 border border-zinc-800 p-4 rounded-xl mb-8 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                        <span class="text-sm text-zinc-300">
+                            There are <strong>{nearbyCollectors.length}</strong> anonymous collectors near <strong>{nearbyCollectors[0].city || 'your area'}</strong>.
+                        </span>
+                    </div>
+                    <button class="text-xs text-[#e3b341] font-bold hover:underline">Open Trade Hub</button>
+                </div>
+            )}
+            </>
+        )}
+
 		<div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
             <div>
                 <h2 class="text-3xl font-bold text-white">Your Album</h2>
@@ -42,18 +169,12 @@ const nations = Object.keys(groups).sort((a, b) => {
                 
                 <div class="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-3">
                     {groups[nation].map((sticker: any) => (
-                        <div class="bg-zinc-900 border border-zinc-800 p-2 rounded flex flex-col items-center hover:border-zinc-600 transition-all cursor-pointer group relative overflow-hidden">
-                            {/* Duplicate Indicator Placeholder */}
-                            <div class="absolute top-0 right-0 bg-blue-600 text-[8px] font-bold px-1.5 py-0.5 rounded-bl opacity-0 group-hover:opacity-100 transition-opacity">
-                                DUP
-                            </div>
-                            
-                            <span class="text-[10px] text-zinc-500 font-mono mb-1">{sticker.code}</span>
-                            <div class="w-full aspect-[3/4] bg-zinc-800 rounded flex items-center justify-center text-zinc-700 font-bold text-lg mb-1 group-hover:bg-zinc-700 group-hover:text-zinc-400 transition-colors">
-                                {sticker.id}
-                            </div>
-                            <span class="text-[10px] text-zinc-400 text-center line-clamp-1 w-full">{sticker.name}</span>
-                        </div>
+                        <StickerCard 
+                            client:visible 
+                            sticker={sticker} 
+                            initialQty={userCollection[sticker.id] || 0} 
+                            isLoggedIn={!!userId} 
+                        />
                     ))}
                 </div>
             </div>
