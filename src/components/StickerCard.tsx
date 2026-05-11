@@ -12,6 +12,7 @@ interface Sticker {
   socialTwitter?: string | null;
   nation?: string | null;
   marketValue?: string | null;
+  imageUrl?: string | null;
 }
 
 interface Props {
@@ -26,6 +27,7 @@ export default function StickerCard({ sticker, initialQty, isLoggedIn, lang = de
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [wikiBio, setWikiBio] = useState<string | null>(null);
+  const [currentImageUrl, setCurrentImageUrl] = useState<string | null>(sticker.imageUrl || null);
 
   // Simple t function for React component
   const t = (key: keyof typeof ui['pt']) => {
@@ -53,35 +55,46 @@ export default function StickerCard({ sticker, initialQty, isLoggedIn, lang = de
 
       if (!response.ok) {
         setQty(prevQty); // Rollback on error
-        console.error('Failed to update collection');
       }
     } catch (error) {
       setQty(prevQty); // Rollback on error
-      console.error('Failed to update collection:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  const fetchWikiBio = async () => {
-    if (wikiBio) return;
+  const enrichPlayerData = async () => {
+    if (wikiBio && currentImageUrl) return;
+    
     try {
       const cleanName = sticker.name.split(' (')[0];
       const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(cleanName)}`);
       const data = await res.json();
+      
       if (data.extract) {
         setWikiBio(data.extract);
-      } else {
-        setWikiBio('No detailed biography found in the football archives.');
+      }
+
+      // If we don't have an image in the DB, but Wikipedia has one, use it and save it.
+      if (!currentImageUrl && data.originalimage?.source) {
+        const newImg = data.originalimage.source;
+        setCurrentImageUrl(newImg);
+        
+        // Save to our DB in background (ignore failure)
+        fetch('/api/stickers/update-image', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ stickerId: sticker.id, imageUrl: newImg }),
+        }).catch(() => {});
       }
     } catch (e) {
-      setWikiBio('Connection to football archives lost.');
+      if (!wikiBio) setWikiBio('Historical data currently unavailable.');
     }
   };
 
   useEffect(() => {
     if (isModalOpen) {
-      fetchWikiBio();
+      enrichPlayerData();
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
@@ -121,12 +134,22 @@ export default function StickerCard({ sticker, initialQty, isLoggedIn, lang = de
               : isOwned 
                 ? 'bg-[#e3b341]/10 text-[#e3b341]' 
                 : 'bg-zinc-800 text-zinc-700'
-          } rounded-lg flex items-center justify-center font-black text-base md:text-xl mb-1 group-hover:bg-zinc-700 group-hover:text-zinc-300 transition-all relative border border-white/5`}
+          } rounded-lg flex items-center justify-center font-black text-base md:text-xl mb-1 group-hover:bg-zinc-700 group-hover:text-zinc-300 transition-all relative border border-white/5 overflow-hidden shadow-inner`}
         >
-          {loading && <div className="absolute inset-0 bg-black/40 animate-pulse rounded-lg flex items-center justify-center">
+          {currentImageUrl ? (
+            <img 
+              src={currentImageUrl} 
+              className={`absolute inset-0 w-full h-full object-cover ${isOwned ? 'opacity-90' : 'opacity-20 grayscale'}`} 
+              alt={sticker.name}
+              loading="lazy"
+            />
+          ) : (
+            <span className="relative z-10">{sticker.id}</span>
+          )}
+          
+          {loading && <div className="absolute inset-0 bg-black/40 animate-pulse rounded-lg flex items-center justify-center z-20">
              <div className="w-4 h-4 border-2 border-[#e3b341] border-t-transparent rounded-full animate-spin" />
           </div>}
-          {sticker.id}
         </div>
         
         <span className={`text-[8px] md:text-[10px] ${isOwned ? 'text-zinc-100 font-bold' : 'text-zinc-500'} text-center line-clamp-1 w-full mb-1.5 md:mb-2 italic uppercase`}>
@@ -158,12 +181,14 @@ export default function StickerCard({ sticker, initialQty, isLoggedIn, lang = de
             onClick={(e) => e.stopPropagation()}
             className="bg-zinc-950 border border-zinc-800 w-full max-w-lg rounded-[3rem] overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.8)] relative"
           >
-            {/* Header with Flag Background */}
-            <div className="relative h-64 md:h-80 overflow-hidden">
-                {flagUrl && (
+            {/* Header with Player Background */}
+            <div className="relative h-72 md:h-96 overflow-hidden">
+                {currentImageUrl ? (
+                   <img src={currentImageUrl} className="absolute inset-0 w-full h-full object-cover opacity-40 blur-lg scale-110" />
+                ) : flagUrl && (
                     <img src={flagUrl} className="absolute inset-0 w-full h-full object-cover opacity-10 blur-3xl scale-125" />
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent" />
                 
                 <button 
                     onClick={() => setIsModalOpen(false)}
@@ -172,25 +197,29 @@ export default function StickerCard({ sticker, initialQty, isLoggedIn, lang = de
                     <span className="text-2xl">✕</span>
                 </button>
 
-                <div className="absolute bottom-10 left-12 flex items-end gap-8">
-                    {flagUrl && (
+                <div className="absolute bottom-10 left-12 right-12 flex items-end justify-between">
+                    <div className="flex items-end gap-8">
                         <div className="relative group">
                             <div className="absolute -inset-1 bg-white/20 rounded-3xl blur opacity-30 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
-                            <img src={flagUrl} className="relative w-24 md:w-32 rounded-2xl shadow-2xl border border-white/10 transform -rotate-3" alt={sticker.nation || ''} />
+                            {currentImageUrl ? (
+                                <img src={currentImageUrl} className="relative w-32 md:w-44 rounded-3xl shadow-2xl border border-white/10 transform -rotate-2" alt={sticker.name} />
+                            ) : flagUrl && (
+                                <img src={flagUrl} className="relative w-24 md:w-32 rounded-2xl shadow-2xl border border-white/10 transform -rotate-3" alt={sticker.nation || ''} />
+                            )}
                         </div>
-                    )}
-                    <div>
-                        <span className="text-[10px] md:text-xs font-black text-[#e3b341] uppercase tracking-[0.5em] italic mb-3 block drop-shadow-lg">
-                            {sticker.code} • NO. {sticker.id}
-                        </span>
-                        <h2 className="text-5xl md:text-7xl font-black text-white italic tracking-tighter uppercase leading-[0.75] mb-3 drop-shadow-2xl">
-                            {sticker.name.split(' (')[0]}
-                        </h2>
-                        <div className="flex items-center gap-3">
-                            <div className={`w-3 h-3 rounded-full ${isOwned ? 'bg-green-500 animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.5)]' : 'bg-zinc-700'}`}></div>
-                            <p className="text-zinc-400 font-black uppercase tracking-widest text-[10px] md:text-xs italic">
-                                {sticker.nation} {isDuplicate ? `• ${qty} COPIES` : isOwned ? '• OWNED' : '• MISSING'}
-                            </p>
+                        <div>
+                            <span className="text-[10px] md:text-xs font-black text-[#e3b341] uppercase tracking-[0.5em] italic mb-3 block drop-shadow-lg">
+                                {sticker.code} • NO. {sticker.id}
+                            </span>
+                            <h2 className="text-5xl md:text-7xl font-black text-white italic tracking-tighter uppercase leading-[0.75] mb-3 drop-shadow-2xl">
+                                {sticker.name.split(' (')[0]}
+                            </h2>
+                            <div className="flex items-center gap-3">
+                                <div className={`w-3 h-3 rounded-full ${isOwned ? 'bg-green-500 animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.5)]' : 'bg-zinc-700'}`}></div>
+                                <p className="text-zinc-400 font-black uppercase tracking-widest text-[10px] md:text-xs italic">
+                                    {sticker.nation} {isDuplicate ? `• ${qty} COPIES` : isOwned ? '• OWNED' : '• MISSING'}
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -221,8 +250,8 @@ export default function StickerCard({ sticker, initialQty, isLoggedIn, lang = de
                         Historical Archive
                         <div className="flex-grow h-[1px] bg-zinc-800" />
                     </div>
-                    <p className="text-zinc-400 text-sm md:text-lg leading-relaxed line-clamp-6 font-medium italic">
-                        {wikiBio || 'Synchronizing with global football intelligence...'}
+                    <p className="text-zinc-400 text-sm md:text-lg leading-relaxed line-clamp-4 font-medium italic">
+                        {wikiBio || 'Scanning global football archives...'}
                     </p>
                 </div>
 

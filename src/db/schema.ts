@@ -17,6 +17,7 @@ export const stickers = pgTable('stickers', {
   socialInstagram: text('social_instagram'), // Link or handle
   socialTwitter: text('social_twitter'),
   marketValue: varchar('market_value', { length: 100 }), // Optional: "€100M"
+  imageUrl: text('image_url'), // Link to player photo (fair use)
 });
 
 export const userRoleEnum = pgEnum('user_role', ['USER', 'ADMIN']);

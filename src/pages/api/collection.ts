@@ -4,7 +4,8 @@ import { collection } from '../../db/schema';
 import { and, eq, sql } from 'drizzle-orm';
 
 export const POST: APIRoute = async ({ request, locals }) => {
-  const { userId } = locals.auth();
+  const auth = typeof locals.auth === 'function' ? locals.auth() : (locals.auth as any);
+  const userId = auth?.userId;
   if (!userId) {
     return new Response('Unauthorized', { status: 401 });
   }

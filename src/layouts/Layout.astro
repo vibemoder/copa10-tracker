@@ -60,16 +60,20 @@ const ogImage = `${siteUrl}/og-image.png`; // Fallback to a future image
         <LocationSync client:load isLoggedIn={!!userId} />
 		<header class="border-b border-zinc-800 p-4 sticky top-0 bg-zinc-950/80 backdrop-blur-md z-50">
             <div class="max-w-7xl mx-auto flex justify-between items-center w-full">
-                <h1 class="text-xl md:text-2xl font-black text-[#e3b341] tracking-tighter italic animate-title">
-                    {t('nav.title')}
-                </h1>
+                <h1 class="text-lg md:text-xl font-bold text-[#e3b341]">{t('nav.title')}</h1>
                 <nav class="flex items-center gap-4">
                     <div class="hidden md:flex gap-2 text-xs font-bold">
                         <a href="/pt" class={lang === 'pt' ? 'text-[#e3b341]' : 'text-zinc-500 hover:text-zinc-300'}>PT</a>
                         <a href="/en" class={lang === 'en' ? 'text-[#e3b341]' : 'text-zinc-500 hover:text-zinc-300'}>EN</a>
                         <a href="/es" class={lang === 'es' ? 'text-[#e3b341]' : 'text-zinc-500 hover:text-zinc-300'}>ES</a>
                     </div>
-                    {userId && <UserButton />}
+                    {userId ? (
+                        <UserButton />
+                    ) : (
+                        <SignInButton mode="modal" class="bg-[#e3b341] text-zinc-950 px-3 py-1.5 md:px-4 md:py-2 rounded text-sm font-bold hover:bg-[#d4a230] transition-colors">
+                            {t('nav.signin')}
+                        </SignInButton>
+                    )}
                 </nav>
             </div>
 		</header>
@@ -117,14 +121,8 @@ const ogImage = `${siteUrl}/og-image.png`; // Fallback to a future image
                     </div>
                 </div>
 
-                {!userId && (
-                    <SignInButton mode="modal" class="mt-8 text-[10px] text-zinc-600 hover:text-[#e3b341] uppercase tracking-[0.2em] transition-colors cursor-pointer">
-                        {t('nav.signin')}
-                    </SignInButton>
-                )}
-
                 <p class="mt-10 text-[9px] text-zinc-800 font-black uppercase tracking-[0.5em]">
-                    &copy; {new Date().getFullYear()} Copa10
+                    &copy; {new Date().getFullYear()} Copa10 Tracker
                 </p>
             </div>
         </footer>
@@ -135,20 +133,4 @@ const ogImage = `${siteUrl}/og-image.png`; // Fallback to a future image
 	:root {
 		--primary: #e3b341;
 	}
-
-    @keyframes title-glow {
-        0%, 100% {
-            text-shadow: 0 0 10px rgba(227, 179, 65, 0.2);
-            transform: translateY(0) skewX(-12deg);
-        }
-        50% {
-            text-shadow: 0 0 25px rgba(227, 179, 65, 0.5);
-            transform: translateY(-2px) skewX(-12deg);
-        }
-    }
-
-    .animate-title {
-        animation: title-glow 4s ease-in-out infinite;
-        display: inline-block;
-    }
 </style>

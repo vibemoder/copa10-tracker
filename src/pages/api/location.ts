@@ -7,7 +7,8 @@ import { Client } from "@googlemaps/google-maps-services-js";
 const client = new Client({});
 
 export const POST: APIRoute = async ({ request, locals }) => {
-  const { userId } = locals.auth();
+  const auth = typeof locals.auth === 'function' ? locals.auth() : (locals.auth as any);
+  const userId = auth?.userId;
   if (!userId) {
     return new Response('Unauthorized', { status: 401 });
   }

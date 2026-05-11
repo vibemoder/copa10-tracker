@@ -1,18 +1,18 @@
-import { db } from './src/db';
-import { stickers } from './src/db/schema';
-import { sql } from 'drizzle-orm';
 import * as dotenv from 'dotenv';
-
 dotenv.config({ path: '.env.local' });
 
 async function checkConnection() {
+  const { db } = await import('../db');
+  const { sql } = await import('drizzle-orm');
+  
   console.log('🔍 Checking database connection...');
   try {
-    const result = await db.execute(sql`SELECT 1`);
-    console.log('✅ Database connection successful!');
+    const result = await db.execute(sql`SELECT 1 as test`);
+    console.log('✅ Database connection result:', JSON.stringify(result, null, 2));
     
-    const stickerCount = await db.select({ count: sql`count(*)` }).from(stickers);
-    console.log(`📊 Current sticker count in DB: ${stickerCount[0].count}`);
+    console.log('📋 Checking for profiles table...');
+    const profilesResult = await db.execute(sql`SELECT count(*) FROM profiles`);
+    console.log('Profiles count:', JSON.stringify(profilesResult, null, 2));
   } catch (error) {
     console.error('❌ Database connection failed:', error);
   }

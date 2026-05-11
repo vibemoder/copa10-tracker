@@ -2,10 +2,11 @@ import { db } from './index';
 import { profiles } from './schema';
 import { eq } from 'drizzle-orm';
 
+export const isAdmin = (email: string | undefined) => email === 'ca.imbriani@gmail.com';
+
 export async function syncUser(clerkUserId: string, email: string, referredBy?: string | null) {
   try {
-    const isAdmin = email === 'ca.imbriani@gmail.com';
-    const role = isAdmin ? 'ADMIN' : 'USER';
+    const role = isAdmin(email) ? 'ADMIN' : 'USER';
 
     const existingProfile = await db.query.profiles.findFirst({
         where: eq(profiles.id, clerkUserId),
@@ -16,7 +17,6 @@ export async function syncUser(clerkUserId: string, email: string, referredBy?: 
         id: clerkUserId,
         email: email,
         role: role,
-        referredBy: referredBy,
         lastActive: new Date(),
         }).onConflictDoNothing();
     } else {
