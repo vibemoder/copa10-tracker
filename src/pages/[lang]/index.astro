@@ -1,0 +1,196 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { db } from '../../db';
+import { stickers, collection, profiles } from '../../db/schema';
+import { asc, eq, and } from 'drizzle-orm';
+import { syncUser } from '../../db/utils';
+import StickerCard from '../../components/StickerCard';
+import fallbackStickers from '../../scripts/stickers_seed.json';
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'pt' } },
+    { params: { lang: 'es' } },
+  ];
+}
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const auth = Astro.locals.auth?.();
+const userId = auth?.userId;
+let userEmail = '';
+
+if (userId) {
+    try {
+        const user = await Astro.locals.currentUser();
+        userEmail = user?.emailAddresses[0]?.emailAddress || '';
+        if (userEmail) {
+            await syncUser(userId, userEmail);
+        }
+    } catch (e) {
+        console.warn('User sync failed, probably no DB');
+    }
+}
+
+// Fetch stickers from the database
+let stickerData = [];
+let userCollection: Record<number, number> = {};
+let dbError = false;
+
+try {
+    stickerData = await db.select().from(stickers).orderBy(asc(stickers.id));
+    
+    if (userId) {
+        const userStickers = await db.select().from(collection).where(eq(collection.userId, userId));
+        userCollection = userStickers.reduce((acc, row) => {
+            acc[row.stickerId] = row.qty;
+            return acc;
+        }, {} as Record<number, number>);
+    }
+} catch (error) {
+    console.warn('DB connection failed, using fallback JSON data.');
+    stickerData = fallbackStickers;
+    dbError = true;
+}
+
+// Group stickers by nation for the "Combined View"
+const groups = stickerData.reduce((acc: any, sticker) => {
+  const key = sticker.nation || 'Special';
+  if (!acc[key]) acc[key] = [];
+  acc[key].push(sticker);
+  return acc;
+}, {});
+
+const nations = Object.keys(groups).sort((a, b) => {
+    if (a === 'Special') return -1;
+    if (b === 'Special') return 1;
+    return a.localeCompare(b);
+});
+
+// Progress Stats
+const totalStickers = stickerData.length;
+const ownedCount = Object.values(userCollection).filter(qty => qty > 0).length;
+const missingCount = totalStickers - ownedCount;
+const percentOwned = totalStickers > 0 ? Math.round((ownedCount / totalStickers) * 100) : 0;
+const totalDuplicates = Object.values(userCollection).reduce((acc, qty) => acc + Math.max(0, qty - 1), 0);
+
+// Fetch Nearby Collectors (Anonymous)
+let nearbyCollectors: any[] = [];
+if (userId && !dbError) {
+    const userProfile = await db.query.profiles.findFirst({
+        where: eq(profiles.id, userId)
+    });
+    
+    if (userProfile?.lat && userProfile?.lng) {
+        nearbyCollectors = await db.select({
+            id: profiles.id,
+            city: profiles.city,
+        })
+        .from(profiles)
+        .where(
+            and(
+                eq(profiles.lat, userProfile.lat),
+                eq(profiles.lng, userProfile.lng),
+            )
+        )
+        .limit(10);
+    }
+}
+---
+
+<Layout title={`${t('nav.title')} - ${t('album.title')}`}>
+	<section class="py-4 md:py-8">
+        {dbError && (
+            <div class="bg-red-900/20 border border-red-900/50 p-4 md:p-6 rounded-xl mb-6 md:mb-8 text-center">
+                <h3 class="text-lg md:text-xl font-bold text-red-500 mb-1 md:mb-2">{t('error.db_title')}</h3>
+                <p class="text-xs md:text-sm text-zinc-400">{t('error.db_msg')}</p>
+            </div>
+        )}
+
+        {userId && !dbError && (
+            <>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6 md:mb-8">
+                <div class="bg-zinc-900 border border-zinc-800 p-3 md:p-4 rounded-xl shadow-lg">
+                    <span class="text-[10px] md:text-xs text-zinc-500 uppercase tracking-widest font-bold">{t('stats.completion')}</span>
+                    <div class="flex items-end gap-2 mt-1">
+                        <span class="text-2xl md:text-3xl font-bold text-[#e3b341]">{percentOwned}%</span>
+                        <span class="text-[10px] md:text-sm text-zinc-400 mb-0.5 md:mb-1">{ownedCount}/{totalStickers}</span>
+                    </div>
+                    <div class="w-full bg-zinc-800 h-1 md:h-1.5 rounded-full mt-2 md:mt-3 overflow-hidden">
+                        <div class="bg-[#e3b341] h-full transition-all duration-500" style={`width: ${percentOwned}%`} />
+                    </div>
+                </div>
+                <div class="bg-zinc-900 border border-zinc-800 p-3 md:p-4 rounded-xl shadow-lg">
+                    <span class="text-[10px] md:text-xs text-zinc-500 uppercase tracking-widest font-bold">{t('stats.missing')}</span>
+                    <div class="flex items-end gap-2 mt-1">
+                        <span class="text-2xl md:text-3xl font-bold text-white">{missingCount}</span>
+                    </div>
+                </div>
+                <div class="bg-zinc-900 border border-zinc-800 p-3 md:p-4 rounded-xl shadow-lg">
+                    <span class="text-[10px] md:text-xs text-zinc-500 uppercase tracking-widest font-bold">{t('stats.duplicates')}</span>
+                    <div class="flex items-end gap-2 mt-1">
+                        <span class="text-2xl md:text-3xl font-bold text-blue-500">{totalDuplicates}</span>
+                    </div>
+                </div>
+                <div class="bg-zinc-900 border border-zinc-800 p-3 md:p-4 rounded-xl shadow-lg">
+                    <span class="text-[10px] md:text-xs text-zinc-500 uppercase tracking-widest font-bold">{t('stats.nearby')}</span>
+                    <div class="flex items-end gap-1 md:gap-2 mt-1">
+                        <span class="text-2xl md:text-3xl font-bold text-green-500">{nearbyCollectors.length}</span>
+                        <span class="text-[10px] md:text-xs text-zinc-500 mb-0.5 md:mb-1">{t('stats.collectors')}</span>
+                    </div>
+                </div>
+            </div>
+
+            {nearbyCollectors.length > 0 && (
+                <div class="bg-zinc-900/50 border border-zinc-800 p-3 md:p-4 rounded-xl mb-6 md:mb-8 flex flex-col md:flex-row items-center justify-between gap-3 text-center md:text-left">
+                    <div class="flex items-center gap-3">
+                        <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                        <span class="text-xs md:text-sm text-zinc-300">
+                           <Fragment set:html={t('banner.nearby').replace('{count}', nearbyCollectors.length.toString()).replace('{city}', nearbyCollectors[0].city || 'your area')} />
+                        </span>
+                    </div>
+                    <button class="text-[10px] md:text-xs text-[#e3b341] font-bold hover:underline whitespace-nowrap">{t('banner.tradehub')}</button>
+                </div>
+            )}
+            </>
+        )}
+
+		<div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 md:mb-8 gap-4">
+            <div>
+                <h2 class="text-2xl md:text-3xl font-bold text-white">{t('album.title')}</h2>
+                <p class="text-xs md:text-sm text-zinc-400">{t('album.subtitle')}</p>
+            </div>
+            <div class="flex gap-2 overflow-x-auto pb-2 w-full md:w-auto -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
+                <button class="bg-zinc-800 px-3 py-1.5 md:px-4 md:py-2 rounded-full text-[10px] md:text-sm font-medium hover:bg-zinc-700 whitespace-nowrap border border-zinc-700">{t('filter.all')}</button>
+                {nations.slice(0, 5).map(nation => (
+                    <button class="bg-zinc-900 px-3 py-1.5 md:px-4 md:py-2 rounded-full text-[10px] md:text-sm font-medium hover:bg-zinc-800 whitespace-nowrap border border-zinc-800 text-zinc-400">{nation}</button>
+                ))}
+                <button class="bg-zinc-900 px-3 py-1.5 md:px-4 md:py-2 rounded-full text-[10px] md:text-sm font-medium hover:bg-zinc-800 whitespace-nowrap border border-zinc-800 text-zinc-400">{t('filter.more')}</button>
+            </div>
+        </div>
+
+        {nations.map((nation) => (
+            <div class="mb-8 md:mb-12">
+                <div class="flex items-center gap-4 mb-4 md:mb-6 border-b border-zinc-800 pb-2">
+                    <h3 class="text-base md:text-xl font-bold text-[#e3b341] uppercase tracking-widest">{nation}</h3>
+                    <span class="text-[10px] md:text-xs text-zinc-500 font-mono">{groups[nation].length} stickers</span>
+                </div>
+                
+                <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-2 md:gap-3">
+                    {groups[nation].map((sticker: any) => (
+                        <StickerCard 
+                            client:visible 
+                            sticker={sticker} 
+                            initialQty={userCollection[sticker.id] || 0} 
+                            isLoggedIn={!!userId} 
+                            lang={lang}
+                        />
+                    ))}
+                </div>
+            </div>
+        ))}
+	</section>
+</Layout>

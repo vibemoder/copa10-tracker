@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ui, defaultLang } from '../i18n/ui';
 
 interface Sticker {
   id: number;
@@ -14,12 +15,19 @@ interface Props {
   sticker: Sticker;
   initialQty: number;
   isLoggedIn: boolean;
+  lang?: string;
 }
 
-export default function StickerCard({ sticker, initialQty, isLoggedIn }: Props) {
+export default function StickerCard({ sticker, initialQty, isLoggedIn, lang = defaultLang }: Props) {
   const [qty, setQty] = useState(initialQty);
   const [loading, setLoading] = useState(false);
   const [showStats, setShowStats] = useState(false);
+
+  // Simple t function for React component
+  const t = (key: keyof typeof ui['pt']) => {
+    const l = (lang in ui ? lang : defaultLang) as keyof typeof ui;
+    return ui[l][key] || ui[defaultLang][key];
+  };
 
   const updateCollection = async (e: React.MouseEvent, action: 'inc' | 'dec' | 'toggle') => {
     e.stopPropagation();
@@ -51,50 +59,50 @@ export default function StickerCard({ sticker, initialQty, isLoggedIn }: Props) 
   return (
     <div 
       onClick={() => setShowStats(!showStats)}
-      className={`bg-zinc-900 border ${isOwned ? 'border-[#e3b341]/50 shadow-[0_0_10px_rgba(227,179,65,0.1)]' : 'border-zinc-800'} p-2 rounded flex flex-col items-center hover:border-zinc-600 transition-all group relative overflow-hidden h-full cursor-pointer`}
+      className={`bg-zinc-900 border ${isOwned ? 'border-[#e3b341]/50 shadow-[0_0_10px_rgba(227,179,65,0.1)]' : 'border-zinc-800'} p-1.5 md:p-2 rounded flex flex-col items-center hover:border-zinc-600 transition-all group relative overflow-hidden h-full cursor-pointer select-none`}
     >
       {isDuplicate && (
-        <div className="absolute top-0 right-0 bg-blue-600 text-[8px] font-bold px-1.5 py-0.5 rounded-bl z-10">
+        <div className="absolute top-0 right-0 bg-blue-600 text-[7px] md:text-[8px] font-bold px-1 md:px-1.5 py-0.5 rounded-bl z-10">
           x{qty}
         </div>
       )}
       
-      <span className={`text-[10px] ${isOwned ? 'text-[#e3b341]' : 'text-zinc-500'} font-mono mb-1`}>{sticker.code}</span>
+      <span className={`text-[8px] md:text-[10px] ${isOwned ? 'text-[#e3b341]' : 'text-zinc-500'} font-mono mb-0.5 md:mb-1`}>{sticker.code}</span>
       
       <div 
         onClick={(e) => isLoggedIn && updateCollection(e, 'toggle')}
-        className={`w-full aspect-[3/4] ${isOwned ? 'bg-[#e3b341]/10 text-[#e3b341]' : 'bg-zinc-800 text-zinc-700'} rounded flex items-center justify-center font-bold text-lg mb-1 group-hover:bg-zinc-700 group-hover:text-zinc-400 transition-colors relative`}
+        className={`w-full aspect-[3/4] ${isOwned ? 'bg-[#e3b341]/10 text-[#e3b341]' : 'bg-zinc-800 text-zinc-700'} rounded flex items-center justify-center font-bold text-base md:text-lg mb-1 group-hover:bg-zinc-700 group-hover:text-zinc-400 transition-colors relative`}
       >
         {loading && <div className="absolute inset-0 bg-black/20 animate-pulse rounded" />}
         {sticker.id}
 
         {showStats && sticker.club && (
-           <div className="absolute inset-0 bg-zinc-900/95 p-2 flex flex-col justify-center items-start gap-1 z-20 animate-in fade-in duration-200">
-              <div className="text-[8px] uppercase text-zinc-500 font-bold">Club</div>
-              <div className="text-[10px] text-zinc-100 truncate w-full">{sticker.club}</div>
+           <div className="absolute inset-0 bg-zinc-900/95 p-1.5 md:p-2 flex flex-col justify-center items-start gap-0.5 md:gap-1 z-20 animate-in fade-in duration-200">
+              <div className="text-[7px] md:text-[8px] uppercase text-zinc-500 font-bold">{t('card.club')}</div>
+              <div className="text-[9px] md:text-[10px] text-zinc-100 truncate w-full">{sticker.club}</div>
               {sticker.height && (
                 <>
-                  <div className="text-[8px] uppercase text-zinc-500 font-bold mt-1">Height</div>
-                  <div className="text-[10px] text-zinc-100">{sticker.height}</div>
+                  <div className="text-[7px] md:text-[8px] uppercase text-zinc-500 font-bold mt-0.5 md:mt-1">{t('card.height')}</div>
+                  <div className="text-[9px] md:text-[10px] text-zinc-100">{sticker.height}</div>
                 </>
               )}
            </div>
         )}
       </div>
       
-      <span className={`text-[10px] ${isOwned ? 'text-zinc-200' : 'text-zinc-400'} text-center line-clamp-1 w-full mb-2`}>{sticker.name}</span>
+      <span className={`text-[8px] md:text-[10px] ${isOwned ? 'text-zinc-200' : 'text-zinc-400'} text-center line-clamp-1 w-full mb-1.5 md:mb-2`}>{sticker.name}</span>
       
       {isLoggedIn && (
         <div className="flex gap-1 w-full mt-auto">
           <button 
             onClick={(e) => updateCollection(e, 'dec')}
-            className="flex-1 bg-zinc-800 hover:bg-zinc-700 text-[10px] py-1 rounded transition-colors"
+            className="flex-1 bg-zinc-800 hover:bg-zinc-700 text-[8px] md:text-[10px] py-0.5 md:py-1 rounded transition-colors"
           >
             -
           </button>
           <button 
             onClick={(e) => updateCollection(e, 'inc')}
-            className="flex-1 bg-zinc-800 hover:bg-zinc-700 text-[10px] py-1 rounded transition-colors"
+            className="flex-1 bg-zinc-800 hover:bg-zinc-700 text-[8px] md:text-[10px] py-0.5 md:py-1 rounded transition-colors"
           >
             +
           </button>
