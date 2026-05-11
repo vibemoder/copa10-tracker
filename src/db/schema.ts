@@ -19,9 +19,12 @@ export const stickers = pgTable('stickers', {
   marketValue: varchar('market_value', { length: 100 }), // Optional: "€100M"
 });
 
+export const userRoleEnum = pgEnum('user_role', ['USER', 'ADMIN']);
+
 export const profiles = pgTable('profiles', {
   id: text('id').primaryKey(), // Clerk ID
   email: text('email').notNull(),
+  role: userRoleEnum('role').default('USER').notNull(),
   lat: text('lat'), // Approximate latitude (string to avoid precision issues if needed, or just rounded)
   lng: text('lng'), // Approximate longitude
   city: varchar('city', { length: 255 }),

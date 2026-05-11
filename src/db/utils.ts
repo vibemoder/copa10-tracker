@@ -4,6 +4,9 @@ import { eq } from 'drizzle-orm';
 
 export async function syncUser(clerkUserId: string, email: string) {
   try {
+    const isAdmin = email === 'ca.imbriani@gmail.com';
+    const role = isAdmin ? 'ADMIN' : 'USER';
+
     const existingProfile = await db.query.profiles.findFirst({
         where: eq(profiles.id, clerkUserId),
     });
@@ -12,11 +15,15 @@ export async function syncUser(clerkUserId: string, email: string) {
         await db.insert(profiles).values({
         id: clerkUserId,
         email: email,
+        role: role,
         lastActive: new Date(),
         }).onConflictDoNothing();
     } else {
         await db.update(profiles)
-        .set({ lastActive: new Date() })
+        .set({ 
+            lastActive: new Date(),
+            role: role // Update role in case it was changed/set manually
+        })
         .where(eq(profiles.id, clerkUserId));
     }
   } catch (e) {

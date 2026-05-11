@@ -25,6 +25,10 @@ export const ui = {
     'error.db_msg': 'Não conseguimos conectar ao banco de dados. Verifique sua configuração.',
     'card.club': 'Clube',
     'card.height': 'Altura',
+    'welcome.title': 'Bem-vindo ao Copa10',
+    'welcome.subtitle': 'O rastreador definitivo de figurinhas para a Copa do Mundo 2026.',
+    'welcome.cta': 'Crie sua conta Google para começar a colecionar',
+    'welcome.button': 'Entrar com Google',
   },
   en: {
     'nav.title': 'Copa10 Sticker Tracker',
@@ -44,6 +48,10 @@ export const ui = {
     'error.db_msg': "We couldn't connect to the database. Check your configuration.",
     'card.club': 'Club',
     'card.height': 'Height',
+    'welcome.title': 'Welcome to Copa10',
+    'welcome.subtitle': 'The definitive sticker tracker for the 2026 World Cup.',
+    'welcome.cta': 'Create your Google account to start collecting',
+    'welcome.button': 'Sign in with Google',
   },
   es: {
     'nav.title': 'Copa10 Sticker Tracker',
@@ -63,5 +71,9 @@ export const ui = {
     'error.db_msg': 'No pudimos conectar con la base de datos. Revisa tu configuración.',
     'card.club': 'Club',
     'card.height': 'Altura',
+    'welcome.title': 'Bienvenido a Copa10',
+    'welcome.subtitle': 'El rastreador definitivo de láminas para la Copa del Mundo 2026.',
+    'welcome.cta': 'Crea tu cuenta de Google para empezar a coleccionar',
+    'welcome.button': 'Iniciar sesión con Google',
   },
 } as const;

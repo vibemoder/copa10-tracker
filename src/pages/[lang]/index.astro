@@ -7,6 +7,7 @@ import { syncUser } from '../../db/utils';
 import StickerCard from '../../components/StickerCard';
 import fallbackStickers from '../../scripts/stickers_seed.json';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import { SignInButton } from '@clerk/astro/components';
 
 export function getStaticPaths() {
   return [
@@ -103,15 +104,37 @@ if (userId && !dbError) {
 
 <Layout title={`${t('nav.title')} - ${t('album.title')}`}>
 	<section class="py-4 md:py-8">
-        {dbError && (
-            <div class="bg-red-900/20 border border-red-900/50 p-4 md:p-6 rounded-xl mb-6 md:mb-8 text-center">
-                <h3 class="text-lg md:text-xl font-bold text-red-500 mb-1 md:mb-2">{t('error.db_title')}</h3>
-                <p class="text-xs md:text-sm text-zinc-400">{t('error.db_msg')}</p>
+        {!userId ? (
+            <div class="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
+                <div class="w-20 h-20 bg-[#e3b341] rounded-3xl flex items-center justify-center mb-8 shadow-[0_0_30px_rgba(227,179,65,0.3)]">
+                    <span class="text-4xl font-black text-zinc-950">10</span>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-black text-white mb-4 tracking-tight">{t('welcome.title')}</h2>
+                <p class="text-zinc-400 text-lg md:text-xl max-w-2xl mb-12">
+                    {t('welcome.subtitle')}
+                </p>
+                
+                <div class="bg-zinc-900 border border-zinc-800 p-8 rounded-2xl max-w-md w-full shadow-2xl">
+                    <p class="text-zinc-300 font-medium mb-6">
+                        {t('welcome.cta')}
+                    </p>
+                    <SignInButton mode="modal" class="w-full bg-[#e3b341] text-zinc-950 px-6 py-4 rounded-xl font-black text-lg hover:bg-[#d4a230] transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg">
+                        {t('welcome.button')}
+                    </SignInButton>
+                    <p class="text-[10px] text-zinc-500 mt-6 uppercase tracking-widest font-bold">
+                        Powered by Google & Clerk
+                    </p>
+                </div>
             </div>
-        )}
-
-        {userId && !dbError && (
+        ) : (
             <>
+            {dbError && (
+                <div class="bg-red-900/20 border border-red-900/50 p-4 md:p-6 rounded-xl mb-6 md:mb-8 text-center">
+                    <h3 class="text-lg md:text-xl font-bold text-red-500 mb-1 md:mb-2">{t('error.db_title')}</h3>
+                    <p class="text-xs md:text-sm text-zinc-400">{t('error.db_msg')}</p>
+                </div>
+            )}
+
             <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6 md:mb-8">
                 <div class="bg-zinc-900 border border-zinc-800 p-3 md:p-4 rounded-xl shadow-lg">
                     <span class="text-[10px] md:text-xs text-zinc-500 uppercase tracking-widest font-bold">{t('stats.completion')}</span>
@@ -155,42 +178,42 @@ if (userId && !dbError) {
                     <button class="text-[10px] md:text-xs text-[#e3b341] font-bold hover:underline whitespace-nowrap">{t('banner.tradehub')}</button>
                 </div>
             )}
+
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 md:mb-8 gap-4">
+                <div>
+                    <h2 class="text-2xl md:text-3xl font-bold text-white">{t('album.title')}</h2>
+                    <p class="text-xs md:text-sm text-zinc-400">{t('album.subtitle')}</p>
+                </div>
+                <div class="flex gap-2 overflow-x-auto pb-2 w-full md:w-auto -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
+                    <button class="bg-zinc-800 px-3 py-1.5 md:px-4 md:py-2 rounded-full text-[10px] md:text-sm font-medium hover:bg-zinc-700 whitespace-nowrap border border-zinc-700">{t('filter.all')}</button>
+                    {nations.slice(0, 5).map(nation => (
+                        <button class="bg-zinc-900 px-3 py-1.5 md:px-4 md:py-2 rounded-full text-[10px] md:text-sm font-medium hover:bg-zinc-800 whitespace-nowrap border border-zinc-800 text-zinc-400">{nation}</button>
+                    ))}
+                    <button class="bg-zinc-900 px-3 py-1.5 md:px-4 md:py-2 rounded-full text-[10px] md:text-sm font-medium hover:bg-zinc-800 whitespace-nowrap border border-zinc-800 text-zinc-400">{t('filter.more')}</button>
+                </div>
+            </div>
+
+            {nations.map((nation) => (
+                <div class="mb-8 md:mb-12">
+                    <div class="flex items-center gap-4 mb-4 md:mb-6 border-b border-zinc-800 pb-2">
+                        <h3 class="text-base md:text-xl font-bold text-[#e3b341] uppercase tracking-widest">{nation}</h3>
+                        <span class="text-[10px] md:text-xs text-zinc-500 font-mono">{groups[nation].length} stickers</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-2 md:gap-3">
+                        {groups[nation].map((sticker: any) => (
+                            <StickerCard 
+                                client:visible 
+                                sticker={sticker} 
+                                initialQty={userCollection[sticker.id] || 0} 
+                                isLoggedIn={!!userId} 
+                                lang={lang}
+                            />
+                        ))}
+                    </div>
+                </div>
+            ))}
             </>
         )}
-
-		<div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 md:mb-8 gap-4">
-            <div>
-                <h2 class="text-2xl md:text-3xl font-bold text-white">{t('album.title')}</h2>
-                <p class="text-xs md:text-sm text-zinc-400">{t('album.subtitle')}</p>
-            </div>
-            <div class="flex gap-2 overflow-x-auto pb-2 w-full md:w-auto -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
-                <button class="bg-zinc-800 px-3 py-1.5 md:px-4 md:py-2 rounded-full text-[10px] md:text-sm font-medium hover:bg-zinc-700 whitespace-nowrap border border-zinc-700">{t('filter.all')}</button>
-                {nations.slice(0, 5).map(nation => (
-                    <button class="bg-zinc-900 px-3 py-1.5 md:px-4 md:py-2 rounded-full text-[10px] md:text-sm font-medium hover:bg-zinc-800 whitespace-nowrap border border-zinc-800 text-zinc-400">{nation}</button>
-                ))}
-                <button class="bg-zinc-900 px-3 py-1.5 md:px-4 md:py-2 rounded-full text-[10px] md:text-sm font-medium hover:bg-zinc-800 whitespace-nowrap border border-zinc-800 text-zinc-400">{t('filter.more')}</button>
-            </div>
-        </div>
-
-        {nations.map((nation) => (
-            <div class="mb-8 md:mb-12">
-                <div class="flex items-center gap-4 mb-4 md:mb-6 border-b border-zinc-800 pb-2">
-                    <h3 class="text-base md:text-xl font-bold text-[#e3b341] uppercase tracking-widest">{nation}</h3>
-                    <span class="text-[10px] md:text-xs text-zinc-500 font-mono">{groups[nation].length} stickers</span>
-                </div>
-                
-                <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-2 md:gap-3">
-                    {groups[nation].map((sticker: any) => (
-                        <StickerCard 
-                            client:visible 
-                            sticker={sticker} 
-                            initialQty={userCollection[sticker.id] || 0} 
-                            isLoggedIn={!!userId} 
-                            lang={lang}
-                        />
-                    ))}
-                </div>
-            </div>
-        ))}
 	</section>
 </Layout>
