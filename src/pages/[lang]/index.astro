@@ -51,8 +51,8 @@ try {
             return acc;
         }, {} as Record<number, number>);
     }
-} catch (error) {
-    console.warn('DB connection failed, using fallback JSON data.');
+} catch (error: any) {
+    console.warn('DB connection failed, using fallback JSON data.', error?.message);
     stickerData = fallbackStickers;
     dbError = true;
 }

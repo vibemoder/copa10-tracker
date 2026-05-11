@@ -2,22 +2,40 @@ import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
 import * as schema from './schema';
 
-const connectionString = 
-  import.meta.env?.POSTGRES_URL || 
-  process.env?.POSTGRES_URL || 
-  import.meta.env?.copa10_POSTGRES_URL || 
-  process.env?.copa10_POSTGRES_URL;
-const isValid = connectionString && !connectionString.includes('...') && connectionString.startsWith('postgres');
+// List of possible environment variable names for the connection string
+const possibleEnvVars = [
+  'POSTGRES_URL',
+  'DATABASE_URL',
+  'copa10_POSTGRES_URL',
+  'copa10_DATABASE_URL',
+  'NEON_DATABASE_URL'
+];
 
-if (!isValid) {
-  console.warn('⚠️  WARNING: POSTGRES_URL is missing or invalid. Database features will be unavailable.');
+let connectionString = '';
+let foundVarName = '';
+
+// Check both import.meta.env and process.env
+for (const envVar of possibleEnvVars) {
+  const val = (import.meta.env as any)?.[envVar] || (process.env as any)?.[envVar];
+  if (val && val.startsWith('postgres') && !val.includes('...')) {
+    connectionString = val;
+    foundVarName = envVar;
+    break;
+  }
 }
 
-// We only initialize neon if we have a valid-looking URL to prevent the driver from crashing the server
+const isValid = connectionString.length > 0;
+
+if (!isValid) {
+  console.warn('⚠️  DATABASE ERROR: No valid connection string found in environment variables.');
+  console.log('Checked variables:', possibleEnvVars.join(', '));
+} else {
+  console.log(`✅ DATABASE: Connected using ${foundVarName}`);
+}
+
+// Resilient initialization
 const sql = isValid ? neon(connectionString) : ((() => {
-    // Return a dummy function that throws a clear error only when called
-    return async () => { throw new Error('Database connection is not configured.'); };
+    return async () => { throw new Error(`Database connection is not configured. Missing valid POSTGRES_URL or DATABASE_URL.`); };
 }) as any);
 
-// Drizzle still needs an object
 export const db = drizzle(sql, { schema });
