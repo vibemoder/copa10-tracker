@@ -8,7 +8,8 @@ interface Props {
 }
 
 const { title } = Astro.props;
-const { userId } = Astro.locals.auth();
+const auth = Astro.locals.auth?.();
+const userId = auth?.userId;
 ---
 
 <!doctype html>
