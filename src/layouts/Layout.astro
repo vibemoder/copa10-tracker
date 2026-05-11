@@ -9,8 +9,15 @@ interface Props {
 }
 
 const { title } = Astro.props;
-const auth = Astro.locals.auth?.();
-const userId = auth?.userId;
+
+// Safe auth check
+let userId: string | null = null;
+try {
+    const auth = typeof Astro.locals.auth === 'function' ? Astro.locals.auth() : (Astro.locals as any).auth;
+    userId = auth?.userId || null;
+} catch (e) {
+    console.warn('Auth check failed in Layout:', e);
+}
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);

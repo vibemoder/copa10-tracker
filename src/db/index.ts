@@ -34,8 +34,9 @@ if (!isValid) {
 }
 
 // Resilient initialization
-const sql = isValid ? neon(connectionString) : ((() => {
-    return async () => { throw new Error(`Database connection is not configured. Missing valid POSTGRES_URL or DATABASE_URL.`); };
-}) as any);
+const sql = isValid ? neon(connectionString) : (async (strings: any, ...values: any[]) => {
+    console.error('DATABASE ERROR: Attempted to query but no connection string is configured.');
+    return []; // Return empty array to prevent map/reduce crashes
+}) as any;
 
 export const db = drizzle(sql, { schema });

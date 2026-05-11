@@ -20,43 +20,65 @@ if (utmSource && !Astro.cookies.has('referral_id')) {
     Astro.cookies.set('referral_id', utmSource, { path: '/', httpOnly: true, maxAge: 60 * 60 * 24 * 7 }); // 1 week
 }
 
-const auth = Astro.locals.auth?.();
-const userId = auth?.userId;
+// Global state
+let userId: string | null = null;
 let userEmail = '';
-
-if (userId) {
-    try {
-        const user = await Astro.locals.currentUser();
-        userEmail = user?.emailAddresses[0]?.emailAddress || '';
-        if (userEmail) {
-            const referralId = Astro.cookies.get('referral_id')?.value;
-            await syncUser(userId, userEmail, referralId);
-        }
-    } catch (e) {
-        console.warn('User sync failed, probably no DB');
-    }
-}
-
-// Fetch stickers from the database
-let stickerData = [];
+let stickerData: any[] = [];
 let userCollection: Record<number, number> = {};
 let dbError = false;
+let criticalError: string | null = null;
 
 try {
-    stickerData = await db.select().from(stickers).orderBy(asc(stickers.id));
-    
+    const auth = typeof Astro.locals.auth === 'function' ? Astro.locals.auth() : (Astro.locals as any).auth;
+    userId = auth?.userId || null;
+
     if (userId) {
-        const userStickers = await db.select().from(collection).where(eq(collection.userId, userId));
-        userCollection = userStickers.reduce((acc, row) => {
-            acc[row.stickerId] = row.qty;
-            return acc;
-        }, {} as Record<number, number>);
+        try {
+            const currentUser = typeof Astro.locals.currentUser === 'function' ? await Astro.locals.currentUser() : null;
+            userEmail = currentUser?.emailAddresses[0]?.emailAddress || '';
+            if (userEmail) {
+                const referralId = Astro.cookies.get('referral_id')?.value;
+                await syncUser(userId, userEmail, referralId);
+            }
+        } catch (e) {
+            console.warn('User sync failed:', e);
+        }
     }
-} catch (error: any) {
-    console.warn('DB connection failed, using fallback JSON data.', error?.message);
+
+    // Fetch stickers from the database
+    console.log('--- Page Rendering Start ---');
+    console.log('Lang:', lang);
+    console.log('UserId:', userId);
+
+    try {
+        stickerData = await db.select().from(stickers).orderBy(asc(stickers.id));
+        console.log('Fetched stickers:', stickerData?.length);
+        
+        if (userId) {
+            const userStickers = await db.select().from(collection).where(eq(collection.userId, userId));
+            userCollection = userStickers.reduce((acc, row) => {
+                acc[row.stickerId] = row.qty;
+                return acc;
+            }, {} as Record<number, number>);
+            console.log('Fetched user collection:', userStickers.length);
+        }
+    } catch (error: any) {
+        console.error('CRITICAL DB ERROR:', error?.message);
+        stickerData = fallbackStickers;
+        dbError = true;
+    }
+
+    if (!stickerData || stickerData.length === 0) {
+        console.warn('Sticker data is empty, using fallback.');
+        stickerData = fallbackStickers;
+    }
+} catch (e: any) {
+    console.error('GLOBAL PAGE ERROR:', e);
+    criticalError = e.message;
     stickerData = fallbackStickers;
-    dbError = true;
 }
+
+
 
 // Group stickers by nation for the "Combined View"
 const groups = stickerData.reduce((acc: any, sticker) => {
@@ -146,6 +168,14 @@ const getNationGradient = (nation: string) => nationColors[nation] || 'from-zinc
 
 <Layout title={`${t('nav.title')} - ${t('album.title')}`}>
 	<section class="py-4 md:py-8 min-h-screen bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-zinc-900 via-black to-black perspective">
+        {criticalError && (
+            <div class="max-w-xl mx-auto mt-20 p-8 bg-red-900/20 border border-red-500/50 rounded-3xl text-center">
+                <h2 class="text-2xl font-black text-red-500 mb-4 uppercase italic">Critical System Error</h2>
+                <p class="text-zinc-400 mb-6">{criticalError}</p>
+                <a href="/pt/" class="inline-block bg-white text-zinc-950 px-6 py-2 rounded-full font-bold uppercase text-xs">Try Refreshing</a>
+            </div>
+        )}
+
         {!userId ? (
             <div class="flex flex-col items-center justify-center min-h-[70vh] text-center px-4 relative overflow-hidden">
                 <div class="absolute top-[-20%] left-[-10%] w-[50%] h-[100%] bg-[#e3b341]/5 blur-[120px] rotate-45 pointer-events-none" />
