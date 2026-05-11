@@ -100,13 +100,30 @@ if (userId && !dbError) {
         .limit(10);
     }
 }
+
+// Color Mapping for Nations (FIFA inspired)
+const nationColors: Record<string, string> = {
+    'Brazil': 'from-[#009739] via-[#fedd00] to-[#009739]',
+    'Argentina': 'from-[#74acdf] via-white to-[#74acdf]',
+    'France': 'from-[#002395] via-white to-[#ed2939]',
+    'Germany': 'from-black via-white to-[#ffce00]',
+    'Spain': 'from-[#aa151b] via-[#f1bf00] to-[#aa151b]',
+    'Italy': 'from-[#008c45] via-white to-[#cd212a]',
+    'England': 'from-white via-[#ce1124] to-white',
+    'Portugal': 'from-[#ed2939] via-[#006600] to-[#ed2939]',
+    'Uruguay': 'from-[#0081c8] via-white to-[#0081c8]',
+    'Mexico': 'from-[#006847] via-white to-[#ce1124]',
+    'USA': 'from-[#3c3b6e] via-white to-[#b22234]',
+    'Special': 'from-[#e3b341] via-[#fff5a5] to-[#c49000]',
+};
+
+const getNationGradient = (nation: string) => nationColors[nation] || 'from-zinc-700 via-zinc-800 to-zinc-900';
 ---
 
 <Layout title={`${t('nav.title')} - ${t('album.title')}`}>
-	<section class="py-4 md:py-8 min-h-screen bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-zinc-900 via-black to-black">
+	<section class="py-4 md:py-8 min-h-screen bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-zinc-900 via-black to-black perspective">
         {!userId ? (
             <div class="flex flex-col items-center justify-center min-h-[70vh] text-center px-4 relative overflow-hidden">
-                {/* FIFA-style light beams */}
                 <div class="absolute top-[-20%] left-[-10%] w-[50%] h-[100%] bg-[#e3b341]/5 blur-[120px] rotate-45 pointer-events-none" />
                 <div class="absolute bottom-[-20%] right-[-10%] w-[50%] h-[100%] bg-blue-500/5 blur-[120px] -rotate-45 pointer-events-none" />
 
@@ -146,7 +163,7 @@ if (userId && !dbError) {
                                 <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
                             </a>
                             <a href="https://www.instagram.com/" target="_blank" class="w-12 h-12 bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600 rounded-2xl flex items-center justify-center hover:opacity-90 transition-all hover:-translate-y-1 shadow-lg">
-                                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.85.058 1.266.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.85-.058-1.267-.07-1.646-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.78-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.78.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-5.838 2.435-5.838 5.838s2.435 5.838 5.838 5.838 5.838-2.435 5.838-5.838-2.435-5.838-5.838-5.838zm0 10.16c-2.387 0-4.322-1.935-4.322-4.322s1.935-4.322 4.322-4.322 4.322 1.935 4.322 4.322-1.935 4.322-4.322 4.322zm5.446-11.758c.859 0 1.555-.696 1.555-1.555s-.696-1.555-1.555-1.555-1.555.696-1.555 1.555.696 1.555 1.555 1.555z"/></svg>
+                                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.85.058 1.266.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.85-.058-1.267-.07-1.646-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.78-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.78.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-5.838 2.435-5.838 5.838s2.435 5.838 5.838 5.838 5.838-2.435 5.838-5.838-2.435-5.838-5.838-5.838-2.435-5.838-5.838-5.838zm0 10.16c-2.387 0-4.322-1.935-4.322-4.322s1.935-4.322 4.322-4.322 4.322 1.935 4.322 4.322-1.935 4.322-4.322 4.322zm5.446-11.758c.859 0 1.555-.696 1.555-1.555s-.696-1.555-1.555-1.555-1.555.696-1.555 1.555.696 1.555 1.555 1.555z"/></svg>
                             </a>
                             <a href="https://www.tiktok.com/" target="_blank" class="w-12 h-12 bg-black rounded-2xl flex items-center justify-center hover:bg-zinc-800 transition-all hover:-translate-y-1 shadow-lg border border-zinc-800">
                                 <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-.99 0-1.49.18-3.4 3.03-6.19 6.44-6.38.54-.03 1.09-.02 1.63.05v4.09c-.45-.06-.9-.07-1.35-.02-1.1.11-2.11.72-2.66 1.65-.4.66-.59 1.46-.57 2.24.03.82.28 1.62.73 2.3.51.77 1.25 1.34 2.12 1.58.7.21 1.48.19 2.15-.02.93-.27 1.73-.89 2.24-1.72.33-.51.48-1.12.53-1.73.07-3.13.04-6.26.06-9.39zm0 0"/></svg>
@@ -253,15 +270,22 @@ if (userId && !dbError) {
 
                 {nations.map((nation) => (
                     <div class="mb-20">
-                        <div class="flex items-center gap-8 mb-10 relative group">
-                            <h3 class="text-2xl md:text-4xl font-black text-white uppercase italic tracking-tighter z-10 group-hover:text-[#e3b341] transition-colors">{nation}</h3>
-                            <div class="h-[3px] flex-grow bg-gradient-to-r from-zinc-800/50 via-zinc-800/20 to-transparent rounded-full" />
-                            <div class="flex items-center gap-3 bg-zinc-900/50 px-5 py-2 rounded-2xl border border-zinc-800/50 backdrop-blur-sm shadow-xl">
-                                <span class="text-[10px] md:text-xs text-zinc-400 font-black uppercase tracking-[0.2em]">{groups[nation].length} items</span>
+                        {/* Parallax Stylized Header */}
+                        <div class="sticky top-20 z-30 py-6 mb-10 overflow-hidden group">
+                            <div class={`absolute inset-0 bg-gradient-to-r ${getNationGradient(nation)} opacity-20 blur-2xl transform scale-150 group-hover:scale-110 transition-transform duration-1000`} />
+                            <div class="flex items-center gap-8 relative">
+                                <div class={`h-1.5 w-24 bg-gradient-to-r ${getNationGradient(nation)} rounded-full shadow-[0_0_15px_rgba(255,255,255,0.2)]`} />
+                                <h3 class="text-3xl md:text-6xl font-black text-white uppercase italic tracking-tighter drop-shadow-[0_5px_15px_rgba(0,0,0,0.5)] transform -skew-x-12">
+                                    {nation}
+                                </h3>
+                                <div class="flex-grow h-[2px] bg-white/10" />
+                                <div class="bg-zinc-900/80 backdrop-blur-md px-6 py-2 rounded-full border border-white/10 shadow-2xl">
+                                    <span class="text-[10px] md:text-xs text-white font-black uppercase tracking-[0.3em]">{groups[nation].length} items</span>
+                                </div>
                             </div>
                         </div>
                         
-                        <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-x-4 gap-y-12">
+                        <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-x-4 gap-y-16">
                             {groups[nation].map((sticker: any) => (
                                 <StickerCard 
                                     client:visible 
@@ -286,5 +310,8 @@ if (userId && !dbError) {
     .no-scrollbar {
         -ms-overflow-style: none;
         scrollbar-width: none;
+    }
+    .perspective {
+        perspective: 1000px;
     }
 </style>

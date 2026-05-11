@@ -90,7 +90,9 @@ export default function StickerCard({ sticker, initialQty, isLoggedIn, lang = de
         )}
       </div>
       
-      <span className={`text-[8px] md:text-[10px] ${isOwned ? 'text-zinc-200' : 'text-zinc-400'} text-center line-clamp-1 w-full mb-1.5 md:mb-2`}>{sticker.name}</span>
+      <span className={`text-[8px] md:text-[10px] ${isOwned ? 'text-zinc-200' : 'text-zinc-400'} text-center line-clamp-1 w-full mb-1.5 md:mb-2`}>
+        {sticker.name.split(' (')[0]}
+      </span>
       
       {isLoggedIn && (
         <div className="flex gap-1 w-full mt-auto">
