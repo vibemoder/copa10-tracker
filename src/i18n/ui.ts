@@ -29,8 +29,10 @@ export const ui = {
     'welcome.subtitle': 'O rastreador definitivo de figurinhas para a Copa do Mundo 2026.',
     'welcome.cta': 'Crie sua conta Google para começar a colecionar',
     'welcome.button': 'Entrar com Google',
-  },
-  en: {
+    'welcome.share_title': 'Compartilhe com outros colecionadores',
+    'seo.description': 'O rastreador definitivo de figurinhas para a Copa do Mundo 2026. Gerencie sua coleção, encontre repetidas e conecte-se com colecionadores próximos.',
+    },
+    en: {
     'nav.title': 'Copa10 Sticker Tracker',
     'nav.signin': 'Sign In',
     'album.title': 'Your Album',
@@ -52,8 +54,10 @@ export const ui = {
     'welcome.subtitle': 'The definitive sticker tracker for the 2026 World Cup.',
     'welcome.cta': 'Create your Google account to start collecting',
     'welcome.button': 'Sign in with Google',
-  },
-  es: {
+    'welcome.share_title': 'Share with other collectors',
+    'seo.description': 'The definitive sticker tracker for the 2026 World Cup. Manage your collection, find duplicates, and connect with nearby collectors.',
+    },
+    es: {
     'nav.title': 'Copa10 Sticker Tracker',
     'nav.signin': 'Iniciar Sesión',
     'album.title': 'Tu Álbum',
@@ -75,5 +79,8 @@ export const ui = {
     'welcome.subtitle': 'El rastreador definitivo de láminas para la Copa del Mundo 2026.',
     'welcome.cta': 'Crea tu cuenta de Google para empezar a coleccionar',
     'welcome.button': 'Iniciar sesión con Google',
-  },
+    'welcome.share_title': 'Comparte con otros coleccionadores',
+    'seo.description': 'El rastreador definitivo de láminas para la Copa del Mundo 2026. Gestiona tu colección, encuentra repetidas y conéctate con coleccionadores cercanos.',
+    },
+
 } as const;
