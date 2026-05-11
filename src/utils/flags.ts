@@ -1,0 +1,58 @@
+export const countryToIso: Record<string, string> = {
+    'Canada': 'ca',
+    'Mexico': 'mx',
+    'USA': 'us',
+    'United States': 'us',
+    'South Africa': 'za',
+    'South Korea': 'kr',
+    'Czechia': 'cz',
+    'Bosnia and Herzegovina': 'ba',
+    'Qatar': 'qa',
+    'Switzerland': 'ch',
+    'Brazil': 'br',
+    'Morocco': 'ma',
+    'Haiti': 'ht',
+    'Scotland': 'gb-sct',
+    'Paraguay': 'py',
+    'Australia': 'au',
+    'Turkey': 'tr',
+    'Germany': 'de',
+    'Curaçao': 'cw',
+    'Ivory Coast': 'ci',
+    'Ecuador': 'ec',
+    'Netherlands': 'nl',
+    'Japan': 'jp',
+    'Sweden': 'se',
+    'Tunisia': 'tn',
+    'Belgium': 'be',
+    'Egypt': 'eg',
+    'Iran': 'ir',
+    'New Zealand': 'nz',
+    'Spain': 'es',
+    'Cape Verde': 'cv',
+    'Saudi Arabia': 'sa',
+    'Uruguay': 'uy',
+    'France': 'fr',
+    'Senegal': 'sn',
+    'Iraq': 'iq',
+    'Norway': 'no',
+    'Argentina': 'ar',
+    'Algeria': 'dz',
+    'Austria': 'at',
+    'Jordan': 'jo',
+    'Portugal': 'pt',
+    'Congo DR': 'cd',
+    'Uzbekistan': 'uz',
+    'Colombia': 'co',
+    'England': 'gb-eng',
+    'Croatia': 'hr',
+    'Ghana': 'gh',
+    'Panama': 'pa'
+};
+
+export const getFlagUrl = (nation: string | null | undefined) => {
+    if (!nation) return null;
+    const iso = countryToIso[nation];
+    if (!iso) return null;
+    return `https://flagcdn.com/w320/${iso.toLowerCase()}.png`;
+};
