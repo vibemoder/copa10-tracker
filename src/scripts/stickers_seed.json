@@ -239,7 +239,10 @@
     "nation": "Mexico",
     "group": "A",
     "teamOrder": 1,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Club América",
+    "height": "1.81 m",
+    "socialInstagram": "luismalagonr"
   },
   {
     "id": 23,
@@ -250,7 +253,10 @@
     "nation": "Mexico",
     "group": "A",
     "teamOrder": 1,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Genoa",
+    "height": "1.84 m",
+    "socialInstagram": "johanvasquez35"
   },
   {
     "id": 24,
@@ -261,7 +267,10 @@
     "nation": "Mexico",
     "group": "A",
     "teamOrder": 1,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Cruz Azul",
+    "height": "1.76 m",
+    "socialInstagram": "jorgiesanchez4"
   },
   {
     "id": 25,
@@ -272,7 +281,10 @@
     "nation": "Mexico",
     "group": "A",
     "teamOrder": 1,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Almería",
+    "height": "1.91 m",
+    "socialInstagram": "cesarmontes03"
   },
   {
     "id": 26,
@@ -283,7 +295,10 @@
     "nation": "Mexico",
     "group": "A",
     "teamOrder": 1,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Toluca",
+    "height": "1.76 m",
+    "socialInstagram": "jesusgallardo17"
   },
   {
     "id": 27,
@@ -294,7 +309,10 @@
     "nation": "Mexico",
     "group": "A",
     "teamOrder": 1,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Club América",
+    "height": "1.79 m",
+    "socialInstagram": "israel_reyes14"
   },
   {
     "id": 28,
@@ -305,7 +323,10 @@
     "nation": "Mexico",
     "group": "A",
     "teamOrder": 1,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Tigres UANL",
+    "height": "1.67 m",
+    "socialInstagram": "diego_lainez"
   },
   {
     "id": 29,
@@ -316,7 +337,10 @@
     "nation": "Mexico",
     "group": "A",
     "teamOrder": 1,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Cruz Azul",
+    "height": "1.74 m",
+    "socialInstagram": "charlyrb10"
   },
   {
     "id": 30,
@@ -327,7 +351,10 @@
     "nation": "Mexico",
     "group": "A",
     "teamOrder": 1,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "West Ham United",
+    "height": "1.87 m",
+    "socialInstagram": "edsonnalvarez"
   },
   {
     "id": 31,
@@ -338,7 +365,10 @@
     "nation": "Mexico",
     "group": "A",
     "teamOrder": 1,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "AEK Athens",
+    "height": "1.69 m",
+    "socialInstagram": "orbelin7pineda"
   },
   {
     "id": 32,
@@ -349,7 +379,10 @@
     "nation": "Mexico",
     "group": "A",
     "teamOrder": 1,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Toluca",
+    "height": "1.79 m",
+    "socialInstagram": "marcelruizv"
   },
   {
     "id": 33,
@@ -371,7 +404,10 @@
     "nation": "Mexico",
     "group": "A",
     "teamOrder": 1,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Club América",
+    "height": "1.67 m",
+    "socialInstagram": "ericksanchez_10"
   },
   {
     "id": 35,
@@ -382,7 +418,10 @@
     "nation": "Mexico",
     "group": "A",
     "teamOrder": 1,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "PSV Eindhoven",
+    "height": "1.75 m",
+    "socialInstagram": "hirvinglozano"
   },
   {
     "id": 36,
@@ -393,7 +432,10 @@
     "nation": "Mexico",
     "group": "A",
     "teamOrder": 1,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Feyenoord",
+    "height": "1.83 m",
+    "socialInstagram": "santigimenez"
   },
   {
     "id": 37,
@@ -404,7 +446,10 @@
     "nation": "Mexico",
     "group": "A",
     "teamOrder": 1,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Fulham",
+    "height": "1.90 m",
+    "socialInstagram": "raulalonsojimenez9"
   },
   {
     "id": 38,
@@ -415,7 +460,10 @@
     "nation": "Mexico",
     "group": "A",
     "teamOrder": 1,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Toluca",
+    "height": "1.73 m",
+    "socialInstagram": "alexisvega.9"
   },
   {
     "id": 39,
@@ -426,7 +474,10 @@
     "nation": "Mexico",
     "group": "A",
     "teamOrder": 1,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Guadalajara",
+    "height": "1.76 m",
+    "socialInstagram": "piojo.alvarado"
   },
   {
     "id": 40,
@@ -437,7 +488,10 @@
     "nation": "Mexico",
     "group": "A",
     "teamOrder": 1,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Pumas UNAM",
+    "height": "1.78 m",
+    "socialInstagram": "cesarh_12"
   },
   {
     "id": 41,
@@ -459,7 +513,10 @@
     "nation": "South Africa",
     "group": "A",
     "teamOrder": 2,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Mamelodi Sundowns",
+    "height": "1.84 m",
+    "socialInstagram": "ronwen30"
   },
   {
     "id": 43,
@@ -470,7 +527,10 @@
     "nation": "South Africa",
     "group": "A",
     "teamOrder": 2,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Orlando Pirates",
+    "height": "1.83 m",
+    "socialInstagram": "sipho_chaine"
   },
   {
     "id": 44,
@@ -481,7 +541,10 @@
     "nation": "South Africa",
     "group": "A",
     "teamOrder": 2,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Mamelodi Sundowns",
+    "height": "1.70 m",
+    "socialInstagram": "aubreymodiba"
   },
   {
     "id": 45,
@@ -492,7 +555,10 @@
     "nation": "South Africa",
     "group": "A",
     "teamOrder": 2,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Orlando Pirates",
+    "height": "1.78 m",
+    "socialInstagram": "samukele_kabini"
   },
   {
     "id": 46,
@@ -503,7 +569,10 @@
     "nation": "South Africa",
     "group": "A",
     "teamOrder": 2,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Orlando Pirates",
+    "height": "1.75 m",
+    "socialInstagram": "mbekezeli_mbokazi"
   },
   {
     "id": 47,
@@ -514,7 +583,10 @@
     "nation": "South Africa",
     "group": "A",
     "teamOrder": 2,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Kaizer Chiefs",
+    "height": "1.80 m",
+    "socialInstagram": "khulumani_ndamane"
   },
   {
     "id": 48,
@@ -525,7 +597,10 @@
     "nation": "South Africa",
     "group": "A",
     "teamOrder": 2,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "FCSB",
+    "height": "1.88 m",
+    "socialInstagram": "siyabonga_ngezana"
   },
   {
     "id": 49,
@@ -536,7 +611,10 @@
     "nation": "South Africa",
     "group": "A",
     "teamOrder": 2,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Mamelodi Sundowns",
+    "height": "1.74 m",
+    "socialInstagram": "khulisomudau"
   },
   {
     "id": 50,
@@ -547,7 +625,10 @@
     "nation": "South Africa",
     "group": "A",
     "teamOrder": 2,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Orlando Pirates",
+    "height": "1.78 m",
+    "socialInstagram": "nkosinathisibisi"
   },
   {
     "id": 51,
@@ -558,7 +639,10 @@
     "nation": "South Africa",
     "group": "A",
     "teamOrder": 2,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Mamelodi Sundowns",
+    "height": "1.76 m",
+    "socialInstagram": "tebohomokoena"
   },
   {
     "id": 52,
@@ -569,7 +653,10 @@
     "nation": "South Africa",
     "group": "A",
     "teamOrder": 2,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Orlando Pirates",
+    "height": "1.82 m",
+    "socialInstagram": "thalente_mbatha"
   },
   {
     "id": 53,
@@ -591,7 +678,10 @@
     "nation": "South Africa",
     "group": "A",
     "teamOrder": 2,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Mamelodi Sundowns",
+    "height": "1.80 m",
+    "socialInstagram": "bathusiaubaas"
   },
   {
     "id": 55,
@@ -602,7 +692,10 @@
     "nation": "South Africa",
     "group": "A",
     "teamOrder": 2,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Gil Vicente",
+    "height": "1.83 m",
+    "socialInstagram": "yaya_sithole"
   },
   {
     "id": 56,
@@ -613,7 +706,10 @@
     "nation": "South Africa",
     "group": "A",
     "teamOrder": 2,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Mamelodi Sundowns",
+    "height": "1.78 m",
+    "socialInstagram": "sipho_mbule"
   },
   {
     "id": 57,
@@ -624,7 +720,10 @@
     "nation": "South Africa",
     "group": "A",
     "teamOrder": 2,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Burnley",
+    "height": "1.85 m",
+    "socialInstagram": "lylefoster"
   },
   {
     "id": 58,
@@ -635,7 +734,10 @@
     "nation": "South Africa",
     "group": "A",
     "teamOrder": 2,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Mamelodi Sundowns",
+    "height": "1.76 m",
+    "socialInstagram": "iqraamrayners9"
   },
   {
     "id": 59,
@@ -646,7 +748,10 @@
     "nation": "South Africa",
     "group": "A",
     "teamOrder": 2,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Orlando Pirates",
+    "height": "1.70 m",
+    "socialInstagram": "mohau_nkota"
   },
   {
     "id": 60,
@@ -657,7 +762,10 @@
     "nation": "South Africa",
     "group": "A",
     "teamOrder": 2,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Polokwane City",
+    "height": "1.68 m",
+    "socialInstagram": "oswin_appollis"
   },
   {
     "id": 61,
@@ -679,7 +787,10 @@
     "nation": "South Korea",
     "group": "A",
     "teamOrder": 3,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Ulsan HD",
+    "height": "1.89 m",
+    "socialInstagram": "hyeonwoo21"
   },
   {
     "id": 63,
@@ -690,7 +801,10 @@
     "nation": "South Korea",
     "group": "A",
     "teamOrder": 3,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Al-Shabab",
+    "height": "1.87 m",
+    "socialInstagram": "sssg_kim"
   },
   {
     "id": 64,
@@ -701,7 +815,10 @@
     "nation": "South Korea",
     "group": "A",
     "teamOrder": 3,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Bayern Munich",
+    "height": "1.90 m",
+    "socialInstagram": "minjae3"
   },
   {
     "id": 65,
@@ -712,7 +829,10 @@
     "nation": "South Korea",
     "group": "A",
     "teamOrder": 3,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Al-Sharjah",
+    "height": "1.82 m",
+    "socialInstagram": "yumin_cho"
   },
   {
     "id": 66,
@@ -723,7 +843,10 @@
     "nation": "South Korea",
     "group": "A",
     "teamOrder": 3,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Red Star Belgrade",
+    "height": "1.80 m",
+    "socialInstagram": "seol_yw"
   },
   {
     "id": 67,
@@ -734,7 +857,10 @@
     "nation": "South Korea",
     "group": "A",
     "teamOrder": 3,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "FC Midtjylland",
+    "height": "1.88 m",
+    "socialInstagram": "hanbeom_lee"
   },
   {
     "id": 68,
@@ -745,7 +871,10 @@
     "nation": "South Korea",
     "group": "A",
     "teamOrder": 3,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "FC Seoul",
+    "height": "1.74 m",
+    "socialInstagram": "taeseok_lee"
   },
   {
     "id": 69,
@@ -756,7 +885,10 @@
     "nation": "South Korea",
     "group": "A",
     "teamOrder": 3,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Ulsan HD",
+    "height": "1.81 m",
+    "socialInstagram": "myung_jae_lee"
   },
   {
     "id": 70,
@@ -767,7 +899,10 @@
     "nation": "South Korea",
     "group": "A",
     "teamOrder": 3,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Mainz 05",
+    "height": "1.80 m",
+    "socialInstagram": "jaesunglee10"
   },
   {
     "id": 71,
@@ -778,7 +913,10 @@
     "nation": "South Korea",
     "group": "A",
     "teamOrder": 3,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Feyenoord",
+    "height": "1.77 m",
+    "socialInstagram": "inbeom_hwang6"
   },
   {
     "id": 72,
@@ -789,7 +927,10 @@
     "nation": "South Korea",
     "group": "A",
     "teamOrder": 3,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Paris Saint-Germain",
+    "height": "1.73 m",
+    "socialInstagram": "kanginleeoficial"
   },
   {
     "id": 73,
@@ -811,7 +952,10 @@
     "nation": "South Korea",
     "group": "A",
     "teamOrder": 3,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Birmingham City",
+    "height": "1.82 m",
+    "socialInstagram": "paik_seungho"
   },
   {
     "id": 75,
@@ -822,7 +966,10 @@
     "nation": "South Korea",
     "group": "A",
     "teamOrder": 3,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "1. FC Nürnberg",
+    "height": "1.79 m",
+    "socialInstagram": "jenscastrop"
   },
   {
     "id": 76,
@@ -833,7 +980,10 @@
     "nation": "South Korea",
     "group": "A",
     "teamOrder": 3,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Gimcheon Sangmu",
+    "height": "1.75 m",
+    "socialInstagram": "leedonggyeong_"
   },
   {
     "id": 77,
@@ -844,7 +994,10 @@
     "nation": "South Korea",
     "group": "A",
     "teamOrder": 3,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "FC Midtjylland",
+    "height": "1.89 m",
+    "socialInstagram": "whrbtjd"
   },
   {
     "id": 78,
@@ -855,7 +1008,10 @@
     "nation": "South Korea",
     "group": "A",
     "teamOrder": 3,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Tottenham Hotspur",
+    "height": "1.83 m",
+    "socialInstagram": "hm_son7"
   },
   {
     "id": 79,
@@ -866,7 +1022,10 @@
     "nation": "South Korea",
     "group": "A",
     "teamOrder": 3,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Wolverhampton Wanderers",
+    "height": "1.77 m",
+    "socialInstagram": "hwangheechan"
   },
   {
     "id": 80,
@@ -877,7 +1036,10 @@
     "nation": "South Korea",
     "group": "A",
     "teamOrder": 3,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "KRC Genk",
+    "height": "1.85 m",
+    "socialInstagram": "hyeon_gyu_oh"
   },
   {
     "id": 81,
@@ -899,7 +1061,10 @@
     "nation": "Czechia",
     "group": "A",
     "teamOrder": 4,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Bayer Leverkusen",
+    "height": "1.96 m",
+    "socialInstagram": "matej_kovar1"
   },
   {
     "id": 83,
@@ -910,7 +1075,10 @@
     "nation": "Czechia",
     "group": "A",
     "teamOrder": 4,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Slavia Prague",
+    "height": "1.92 m",
+    "socialInstagram": "jindra_stanek"
   },
   {
     "id": 84,
@@ -921,7 +1089,10 @@
     "nation": "Czechia",
     "group": "A",
     "teamOrder": 4,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Girona",
+    "height": "1.91 m",
+    "socialInstagram": "ladislav_krejci"
   },
   {
     "id": 85,
@@ -932,7 +1103,10 @@
     "nation": "Czechia",
     "group": "A",
     "teamOrder": 4,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "West Ham United",
+    "height": "1.74 m",
+    "socialInstagram": "vladimir_coufal"
   },
   {
     "id": 86,
@@ -943,7 +1117,10 @@
     "nation": "Czechia",
     "group": "A",
     "teamOrder": 4,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Sparta Prague",
+    "height": "1.89 m",
+    "socialInstagram": "jaroslav_zeleny"
   },
   {
     "id": 87,
@@ -954,7 +1131,10 @@
     "nation": "Czechia",
     "group": "A",
     "teamOrder": 4,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Slavia Prague",
+    "height": "1.80 m",
+    "socialInstagram": "tomas_holes"
   },
   {
     "id": 88,
@@ -965,7 +1145,10 @@
     "nation": "Czechia",
     "group": "A",
     "teamOrder": 4,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Slavia Prague",
+    "height": "1.90 m",
+    "socialInstagram": "davidzima"
   },
   {
     "id": 89,
@@ -976,7 +1159,10 @@
     "nation": "Czechia",
     "group": "A",
     "teamOrder": 4,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "FC Twente",
+    "height": "1.69 m",
+    "socialInstagram": "michalsadilek"
   },
   {
     "id": 90,
@@ -987,7 +1173,10 @@
     "nation": "Czechia",
     "group": "A",
     "teamOrder": 4,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Slavia Prague",
+    "height": "1.89 m",
+    "socialInstagram": "lukasprovod"
   },
   {
     "id": 91,
@@ -998,7 +1187,10 @@
     "nation": "Czechia",
     "group": "A",
     "teamOrder": 4,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Viktoria Plzeň",
+    "height": "1.82 m",
+    "socialInstagram": "lukas_cerv"
   },
   {
     "id": 92,
@@ -1009,7 +1201,10 @@
     "nation": "Czechia",
     "group": "A",
     "teamOrder": 4,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "West Ham United",
+    "height": "1.92 m",
+    "socialInstagram": "tomassoucek28"
   },
   {
     "id": 93,
@@ -1031,7 +1226,10 @@
     "nation": "Czechia",
     "group": "A",
     "teamOrder": 4,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Viktoria Plzeň",
+    "height": "1.77 m",
+    "socialInstagram": "pavelsulc_"
   },
   {
     "id": 95,
@@ -1042,7 +1240,10 @@
     "nation": "Czechia",
     "group": "A",
     "teamOrder": 4,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Viktoria Plzeň",
+    "height": "1.80 m",
+    "socialInstagram": "matejvydra9"
   },
   {
     "id": 96,
@@ -1053,7 +1254,10 @@
     "nation": "Czechia",
     "group": "A",
     "teamOrder": 4,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Mladá Boleslav",
+    "height": "1.68 m",
+    "socialInstagram": "vasil_kusej"
   },
   {
     "id": 97,
@@ -1064,7 +1268,10 @@
     "nation": "Czechia",
     "group": "A",
     "teamOrder": 4,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Slavia Prague",
+    "height": "1.99 m",
+    "socialInstagram": "chory_tomas"
   },
   {
     "id": 98,
@@ -1075,7 +1282,10 @@
     "nation": "Czechia",
     "group": "A",
     "teamOrder": 4,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Rangers",
+    "height": "1.82 m",
+    "socialInstagram": "vaclavcerny11"
   },
   {
     "id": 99,
@@ -1086,7 +1296,10 @@
     "nation": "Czechia",
     "group": "A",
     "teamOrder": 4,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Hoffenheim",
+    "height": "1.88 m",
+    "socialInstagram": "ahlozek"
   },
   {
     "id": 100,
@@ -1097,7 +1310,10 @@
     "nation": "Czechia",
     "group": "A",
     "teamOrder": 4,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Bayer Leverkusen",
+    "height": "1.91 m",
+    "socialInstagram": "p_schicky"
   },
   {
     "id": 101,
@@ -1119,7 +1335,10 @@
     "nation": "Canada",
     "group": "B",
     "teamOrder": 1,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Minnesota United",
+    "height": "1.91 m",
+    "socialInstagram": "daynestclair"
   },
   {
     "id": 103,
@@ -1130,7 +1349,10 @@
     "nation": "Canada",
     "group": "B",
     "teamOrder": 1,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Bayern Munich",
+    "height": "1.83 m",
+    "socialInstagram": "alphonsodavies"
   },
   {
     "id": 104,
@@ -1141,7 +1363,10 @@
     "nation": "Canada",
     "group": "B",
     "teamOrder": 1,
-    "isSpecial": false
+    "isSpecial": false,
+    "club": "Celtic",
+    "height": "1.80 m",
+    "socialInstagram": "alistairjohnston"
   },
   {
     "id": 105,
