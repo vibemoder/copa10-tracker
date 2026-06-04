@@ -3,6 +3,7 @@ import '../styles/global.css'
 import { UserButton, SignInButton } from '@clerk/astro/components';
 import LocationSync from '../components/LocationSync';
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import { inject } from '@vercel/analytics';
 
 interface Props {
 	title: string;
@@ -25,6 +26,8 @@ const t = useTranslations(lang);
 const description = t('seo.description');
 const siteUrl = 'https://copa10tracker.vercel.app';
 const ogImage = `${siteUrl}/og-image.png`; // Fallback to a future image
+
+inject();
 ---
 
 <!doctype html>
